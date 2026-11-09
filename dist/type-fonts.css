@@ -1,0 +1,133 @@
+@font-face {
+  font-family: "KplCJK";
+  src: url("./fonts/KplCJK-100_900-normal.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "KplRajdhani";
+  src: url("./fonts/KplRajdhani-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "KplRajdhani";
+  src: url("./fonts/KplRajdhani-500-normal.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "KplRajdhani";
+  src: url("./fonts/KplRajdhani-600-normal.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "KplRajdhani";
+  src: url("./fonts/KplRajdhani-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "KplCondensed";
+  src: url("./fonts/KplCondensed-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "KplDisplay";
+  src: url("./fonts/KplDisplay-300_700-normal.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "KplBarlow";
+  src: url("./fonts/KplBarlow-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "KplBarlow";
+  src: url("./fonts/KplBarlow-600-normal.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "KplBarlow";
+  src: url("./fonts/KplBarlow-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "KplTitillium";
+  src: url("./fonts/KplTitillium-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "KplTitillium";
+  src: url("./fonts/KplTitillium-600-normal.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "KplTitillium";
+  src: url("./fonts/KplTitillium-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "KplTitillium";
+  src: url("./fonts/KplTitillium-700-italic.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "KplTitillium";
+  src: url("./fonts/KplTitillium-600-italic.woff2") format("woff2");
+  font-weight: 600;
+  font-style: italic;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "KplAnton";
+  src: url("./fonts/KplAnton-400-normal.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face{font-family:"KplDisplayCJK";src:url("./fonts/AlimamaShuHeiTi-Bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+
+@font-face{font-family:"KplRoboto";src:url("./fonts/Roboto-Bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:block;}
+
+@font-face { font-family: KplElectrolize; src: url(./fonts/Electrolize-Regular.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }

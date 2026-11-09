@@ -1,0 +1,11 @@
+# Local artwork, release archives, test outputs, and credentials
+/dist/*
+!/dist/*.html
+!/dist/*.js
+!/dist/*.css
+/work/
+/outputs/
+/release/
+.env*
+*.pem
+*.key

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="选择赛事版式，上传图片并填写单局数据，制作静态 MVP 卡片。2026 KPL 年总支持更换整幅背景。">
+<title>云海观象台 · KPL MVP 制作台</title>
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="/static/styles.css?v=4.10.8-kpl-mvp">
+<link rel="stylesheet" href="/static/refinement.css?v=4.3.10">
+<link rel="stylesheet" href="/static/header-theme.css?v=4.3.19-white-fallback">
+<link rel="stylesheet" href="/static/compact-workbenches.css?v=20260930c">
+<link rel="stylesheet" href="/static/workbench-layout.css?v=4.1.25-7335671f">
+<link rel="stylesheet" href="/static/page-title-notes.css?v=4.3.8">
+<link rel="stylesheet" href="./style.css?v=4.10.11-kpl-source">
+<script src="/static/header-controls.js?v=4.3.19-white-fallback" defer></script>
+<script src="/static/site.js?v=4.10.11-kpl-source" defer></script>
+<script src="/static/nav-click.js?v=4.1.20-b985f70e" defer></script>
+<link rel="stylesheet" href="./type-fonts.css">
+<script src="./hero-catalog.js" defer></script>
+<script src="./honor-catalog.js" defer></script>
+<script src="./team-catalog.js" defer></script>
+<script src="./role-catalog.js" defer></script>
+<script src="./render-shared.js" defer></script>
+<script src="./hero-face-data.js" defer></script>
+<script src="./hero-cutout-catalog.js" defer></script>
+<script src="./event-type.js" defer></script>
+<script src="./reference-slices.js" defer></script>
+<script src="./render.js?v=4.10.11-kpl-source" defer></script>
+<script src="./challenge-2025-slices.js" defer></script>
+<script src="./render-challenge-2025.js" defer></script>
+<script src="./classic-assets.js" defer></script>
+<script src="./render-classic.js" defer></script>
+<script src="./event-assets.js" defer></script>
+<script src="./render-event.js" defer></script>
+<script src="./editor.js?v=4.10.11-kpl-source" defer></script>
+<script src="./shell-adapter.js?v=4.10.11-kpl-source" defer></script>
+</head>
+<body class="kpl-page shared-workbench">
+<header class="site-header"><a href="/">云海观象台</a></header>
+<main id="kpl-tool" class="kpl-main">
+  <div class="kpl-heading tool-heading workbench-heading"><div class="page-title-row"><h1>KPL MVP 制作台</h1><p class="page-title-note">选择赛事版式，上传图片并填写单局数据。</p></div><p class="kpl-privacy">上传的图片仅在浏览器中处理。</p></div>
+  <div class="kpl-workspace">
+    <form id="editor">
+      <section>
+        <h2>赛事模板</h2>
+        <label>版式<select id="template-family" data-no-translate></select></label>
+        <label id="template-version-field">赛事版本<select id="card-template" data-no-translate>
+          <optgroup id="league-templates" label="KPL 职业联赛">
+            <option value="grand2026">2026 KPL 年度总决赛</option>
+            <option value="classic2019spring">2019 KPL 春季赛 · 经典版</option>
+            <option value="classic2019fall">2019 KPL 秋季赛 · 决赛版</option>
+            <option value="classic2018spring">2018 KPL 春季赛 · 经典版</option>
+            <option value="classic2018fall">2018 KPL 秋季赛 · 经典版</option>
+          </optgroup>
+          <optgroup id="cup-templates" label="挑战者杯、世冠与早期杯赛">
+            <option value="challenge2025">2025 王者荣耀挑战者杯 · 决赛版</option>
+          </optgroup>
+        </select></label>
+        <p class="hint" id="template-family-hint" hidden></p>
+        <button id="challenge-demo" type="button" data-challenge-only hidden>载入听悦示例</button>
+        <button id="classic-demo" type="button" data-classic-only hidden>载入本赛季示例</button>
+        <button id="event-demo" type="button" data-event-only hidden>载入赛事示例</button>
+        <p class="hint" data-event-only hidden><a id="event-source" target="_blank" rel="noopener noreferrer">查看转播参考</a></p>
+      </section>
+      <section id="grand-background" data-grand-only>
+        <h2>整幅背景</h2>
+        <label class="kpl-upload">选择背景图片<input id="grand-background-photo" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="grand-background-hint"></label>
+        <p class="hint" id="grand-background-hint">建议使用 16:9 图片。图片居中裁切，铺满整张卡片；更换背景后会自动隐藏示例人物。</p>
+        <label class="kpl-check"><input id="grand-show-portrait" type="checkbox" checked>叠加选手照片</label>
+        <button id="grand-background-reset" type="button" hidden>恢复原背景</button>
+        <p id="grand-background-status" class="hint" role="status"></p>
+      </section>
+      <section>
+        <h2>选手照片</h2>
+        <label class="kpl-upload">选择图片<input id="photo" type="file" accept="image/jpeg,image/png,image/webp"></label>
+        <p class="hint" id="photo-hint">支持 JPG、PNG、WebP。可在预览中拖动照片，也可用下方滑块调整。</p>
+        <label>缩放<input id="zoom" type="range" min="1" max="3" step=".01" value="1"></label>
+        <div class="kpl-pair"><label>左右位置<input id="x" type="range" min="-1" max="1" step=".01" value="0"></label><label>上下位置<input id="y" type="range" min="-1" max="1" step=".01" value="0"></label></div>
+        <div class="kpl-actions"><button id="reset" type="button">重置裁切</button><button id="demo" type="button">恢复赛事示例</button></div>
+      </section>
+      <section>
+        <h2>比赛与选手</h2>
+        <label data-grand-only>赛事<input name="event" maxlength="42" value="2026 KPL 年度总决赛"></label>
+        <label data-grand-only>选手本名<input name="grandRealName" maxlength="16" value="杨涛"></label>
+        <div class="kpl-pair" data-grand-only><label>阶段<input name="stage" maxlength="20" value="擂台赛"></label><label>局次<input name="game" maxlength="12" value="第 1 局"></label></div>
+        <label data-grand-only>系列赛比分<input name="score" maxlength="48"></label>
+        <label data-grand-only>右下横条文案（留空显示赛况）<input name="banner" maxlength="48" value="无限稳帧用iQOO  团战节奏我做主"></label>
+        <div data-challenge-only hidden>
+          <div class="kpl-pair">
+            <label>本局表现词<input name="keyword" list="challenge-keywords" maxlength="10" value="力挽狂澜"></label>
+            <label>选手本名<input name="realName" maxlength="16"></label>
+          </div>
+          <datalist id="challenge-keywords"><option value="力挽狂澜"><option value="关键节奏"><option value="火力全开"></datalist>
+          <label>右下横条文案（留空使用原文案）<input name="challengeBanner" maxlength="48"></label>
+        </div>
+        <div class="kpl-pair" data-classic-only hidden>
+          <label>选手本名<input name="classicRealName" maxlength="16"></label>
+          <label>地区<input name="region" maxlength="12"></label>
+        </div>
+        <div class="kpl-pair"><label>战队<input name="team" maxlength="24" value="北京JDG"></label><label>选手 ID<input name="player" maxlength="24" value="无畏"></label></div>
+        <div class="kpl-pair">
+          <label>战队队标<select id="team-logo" data-no-translate><option value="">使用参考队标</option></select></label>
+          <label id="role-field">局内位置<select id="player-role"><option value="">使用参考位置</option></select></label>
+        </div>
+        <details id="latin-fields"><summary>英文显示（国际赛事可选）</summary>
+          <label>英文战队<input name="latinTeam" maxlength="28"></label>
+          <label>英文选手 ID<input name="latinPlayer" maxlength="28"></label>
+          <label>英文真名<input name="latinRealName" maxlength="32"></label>
+        </details>
+        <div class="kpl-pair" data-event-only hidden>
+          <label data-event-field="realName">选手本名<input name="eventRealName" maxlength="16"></label>
+          <label data-event-field="region">地区<input name="eventRegion" maxlength="12"></label>
+          <label data-event-field="keyword">本局表现词<input name="eventKeyword" maxlength="16"></label>
+          <label data-event-field="heroCaption">英雄英文显示<input name="eventHeroCaption" maxlength="36"></label>
+        </div>
+        <div id="hero-controls">
+          <div class="kpl-pair">
+            <label>官方英雄<select id="hero-select" data-no-translate></select></label>
+            <label>皮肤<select id="skin-select" data-no-translate></select></label>
+          </div>
+          <label>卡片上的英雄名<input name="hero" maxlength="18" value="少司缘"></label>
+          <label>自定义英雄图（可选）<input id="hero-photo" type="file" accept="image/jpeg,image/png,image/webp"></label>
+          <label>英雄缩放<input id="hero-zoom" type="range" min="1" max="4" step=".01" value="1"></label>
+          <div class="kpl-pair">
+            <label>英雄横向焦点<input id="hero-x" type="range" min="0" max="1" step=".01" value=".5"></label>
+            <label>英雄纵向焦点<input id="hero-y" type="range" min="0" max="1" step=".01" value=".35"></label>
+          </div>
+          <button id="clear-hero-photo" type="button" hidden>恢复所选英雄图</button>
+          <p id="hero-status" class="hint" role="status">选择英雄和皮肤即可加载官方图片。</p>
+        </div>
+        <p class="hint" id="embedded-hero" hidden>这套版式的英雄原画与背景合成，沿用转播原图。</p>
+      </section>
+      <section id="honor-section">
+        <h2>荣誉墙</h2>
+        <p class="hint">在本版的荣誉区域显示徽章，可以调整顺序和次数。</p>
+        <p class="hint" id="honor-source-hint" hidden>示例荣誉沿用原片；添加徽章后可自行编辑。</p>
+        <div class="kpl-actions" aria-label="荣誉墙参考样式">
+          <button type="button" data-honor-preset="wuwei">无畏样式</button>
+          <button type="button" data-honor-preset="yinuo">一诺样式</button>
+          <button type="button" data-honor-preset="empty">清空</button>
+          <button id="honor-all" type="button">展示全部荣誉</button>
+        </div>
+        <ol id="honor-list" aria-label="卡片荣誉"></ol>
+        <div class="honor-add">
+          <select id="honor-choice" aria-label="选择荣誉徽章"></select>
+          <button id="honor-add" type="button">添加</button>
+        </div>
+      </section>
+      <section>
+        <h2>单局数据</h2>
+        <div class="kpl-trio" data-event-stat="kda"><label>击杀<input name="kills" type="number" min="0" max="999" step="1" value="0"></label><label>死亡<input name="deaths" type="number" min="0" max="999" step="1" value="2"></label><label>助攻<input name="assists" type="number" min="0" max="999" step="1" value="7"></label></div>
+        <div class="kpl-trio"><label data-event-stat="damage">伤害占比 %<input name="damage" type="number" min="0" max="100" step="any" value="9.4"></label><label data-event-stat="tank">承伤占比 %<input name="tank" type="number" min="0" max="100" step="any" value="14.1"></label><label data-event-stat="participation">参团率 %<input name="participation" type="number" min="0" max="100" step="any" placeholder="选填"></label></div>
+        <div class="kpl-trio" data-event-only hidden>
+          <label data-event-field="economy">经济占比 %<input name="economy" type="number" min="0" max="100" step="any"></label>
+          <label data-event-field="control">控制占比 %<input name="control" type="number" min="0" max="100" step="any"></label>
+          <label data-event-field="conversion">伤害转化比<input name="conversion" type="number" min="0" step="any"></label>
+          <label data-event-field="mvpCount">最佳次数<input name="mvpCount" type="number" min="0" step="1"></label>
+          <label data-event-field="rank">总排名<input name="rank" maxlength="8"></label>
+          <label data-event-field="gpm">分均经济<input name="gpm" type="number" min="0" step="any"></label>
+          <label data-event-field="totalGold">总经济<input name="totalGold" maxlength="12"></label>
+          <label data-event-field="totalDamage">总伤害<input name="totalDamage" maxlength="12"></label>
+        </div>
+      </section>
+    </form>
+    <div class="kpl-preview">
+      <div class="kpl-preview-bar"><h2>成品预览</h2><span>1920 × 1080</span></div>
+      <canvas id="card" width="1920" height="1080" aria-label="单局 MVP 卡片预览"></canvas>
+      <div class="kpl-preview-footer"><button id="download" class="kpl-primary" type="button">下载 PNG</button><p id="status" role="status"></p></div>
+      <p id="credit" class="hint"></p>
+      <p class="hint">非官方单局 MVP 卡片制作工具。<a href="https://github.com/CloudyLaking/KPL-MVP-Generator" target="_blank" rel="noopener noreferrer">GitHub 源码、素材出处与画质说明</a></p>
+    </div>
+  </div>
+</main>
+</body>
+</html>
