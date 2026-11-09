@@ -7,15 +7,31 @@ const upstreamOrigin = "https://meteostation.top";
 const runtimePath = "/tools/kpl-mvp/";
 const liveSources = new Map();
 
+async function readPortal(url, { method = "GET", redirect = "follow" } = {}) {
+  for (const timeout of [45_000, 90_000]) {
+    try {
+      const response = await fetch(url, { method, redirect, signal: AbortSignal.timeout(timeout) });
+      if (response.status >= 500 && timeout === 45_000) {
+        await response.body?.cancel();
+        continue;
+      }
+      const body = method === "HEAD" ? undefined : Buffer.from(await response.arrayBuffer());
+      return { ok: response.ok, status: response.status, headers: response.headers, body };
+    } catch (error) {
+      if (timeout === 90_000) throw error;
+    }
+  }
+}
+
+
 async function readEmbeddedArt(key) {
   const [script, filename] = key.split("/");
   let pending = liveSources.get(script);
   if (!pending) {
     pending = (async () => {
-      const response = await fetch(new URL(runtimePath + script, upstreamOrigin),
-        { redirect: "error", signal: AbortSignal.timeout(45000) });
+      const response = await readPortal(new URL(runtimePath + script, upstreamOrigin), { redirect: "error" });
       if (!response.ok) throw new Error("Could not read the public asset catalog");
-      const content = await response.text();
+      const content = response.body.toString("utf8");
       const assets = new Map();
       for (const [, format, encoded] of content.matchAll(/data:image\/(png|jpeg|webp);base64,([A-Za-z0-9+/=]+)/g)) {
         const bytes = Buffer.from(encoded, "base64");
@@ -107,12 +123,10 @@ function createServer() {
     if (portalResource) {
       if (!["GET", "HEAD"].includes(request.method)) { response.writeHead(405).end(); return; }
       try {
-        const upstream = await fetch(new URL(pathname + address.search, "https://meteostation.top"),
-          { method: request.method, signal: AbortSignal.timeout(30000) });
-        const body = request.method === "HEAD" ? undefined : Buffer.from(await upstream.arrayBuffer());
+        const upstream = await readPortal(new URL(pathname + address.search, upstreamOrigin), { method: request.method });
         response.writeHead(upstream.status, { "Content-Type": upstream.headers.get("content-type") || "application/octet-stream",
           "Cache-Control": "no-cache" });
-        response.end(body);
+        response.end(upstream.body);
       } catch { response.writeHead(502).end(); }
       return;
     }
@@ -137,14 +151,11 @@ function createServer() {
       // Assets served by the public workbench are not copied into this repository.
       try {
         const asset = new URL("/tools/kpl-mvp/" + filename, "https://meteostation.top");
-        const upstream = await fetch(asset, {
-          method: request.method, redirect: "error", signal: AbortSignal.timeout(45000)
-        });
-        const body = request.method === "HEAD" ? undefined : Buffer.from(await upstream.arrayBuffer());
+        const upstream = await readPortal(asset, { method: request.method, redirect: "error" });
         response.writeHead(upstream.status, {
           "Content-Type": upstream.headers.get("content-type") || type,
           "Cache-Control": "no-cache"
-        }).end(body);
+        }).end(upstream.body);
       } catch { response.writeHead(502).end(); }
     }
   });
